@@ -24,7 +24,8 @@ int pos=0;
 //LEDs a utilizar
 int led13 = 13;
 int lectura = 2;    
-int leer = 3;   
+int leer = 3;
+int led6 = 6;
 
 //Estructura
 struct Caracter
@@ -83,7 +84,8 @@ void leerPalabra();
 
 void setup() 
 {
-  pinMode(led13, OUTPUT);   
+  pinMode(led13, OUTPUT);
+  pinMode(led6, OUTPUT);
   //pinMode(lectura, INPUT);   
   //pinMode(leer, INPUT);   
   Serial.begin(9600);
@@ -110,6 +112,7 @@ void leerPalabra(){
    
    //Imprime la variable con los caracteres acumulados hasta el "\n"   
    if (inChar=='\n'){
+      digitalWrite(led6,HIGH);
       Serial.print("Lectura: ");
       Serial.println(string);
       //Borra la variable string para almacenar nuevos datos
@@ -146,6 +149,7 @@ void cambioEstado(){
     variable = false;
     estado = false;
     iVector =0;
+    digitalWrite(led6,LOW);
   }
   contador = contador+1;
 }
