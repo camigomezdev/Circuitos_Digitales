@@ -10,7 +10,8 @@ int iVector;           //Posición del vector actual
 bool variable = false; //Variable para saber si ya se leyó una palabra
 char inChar;           //Caracter para leer 
 String string="";      //Palabra leida    
-int bandera = 2;
+bool bandera = false;       //Que hago? TRUE = Escribir FALSE = Leer
+
 
 //Para la lectura del fotoResistor
 long tiempo;
@@ -19,9 +20,11 @@ bool estado2 = true;
 long acumulador[5];
 int pos=0;
 
+
 //LEDs a utilizar
 int led13 = 13;
-int lectura = 2;       
+int lectura = 2;    
+int leer = 3;   
 
 //Estructura
 struct Caracter
@@ -75,25 +78,30 @@ void traduccion(String palabra);
 void cambioEstado();
 void leerFotoresistencia();
 char buscarCaracter(long acumulador[5], int pos);
+void quehacer();
+void leerPalabra();
 
 void setup() 
 {
-  pinMode(13, OUTPUT);   
+  pinMode(led13, OUTPUT);   
+  //pinMode(lectura, INPUT);   
+  //pinMode(leer, INPUT);   
   Serial.begin(9600);
-  
-  if(bandera==1){
+  attachInterrupt(digitalPinToInterrupt(leer), quehacer, CHANGE);
+  if(!bandera){
     Timer1.initialize(dit);
     Timer1.attachInterrupt(timerIsr);
-  }else if(bandera==2){
+  }else if(bandera){
     Timer1.initialize(50000000);
     attachInterrupt(digitalPinToInterrupt(lectura), leerFotoresistencia, CHANGE);
-  }else if(bandera==3){
-    Serial.println("Esperando");
   }
 }
 
-void loop()
-{
+void loop(){
+  leerPalabra();
+  }
+
+void leerPalabra(){
   if (Serial.available()){
   //Lectura de caracteres   
   inChar = Serial.read();
@@ -109,6 +117,11 @@ void loop()
       string=""; 
    }
   }
+}
+
+void quehacer(){
+  Serial.println("HOLA");
+  bandera = !bandera;
 }
 
 void timerIsr()
