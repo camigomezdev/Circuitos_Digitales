@@ -21,11 +21,12 @@ long acumulador[5];
 int pos=0;
 
 
-//Puertos a utilizar
-int led13 = 13;
-int lectura = 2;    
-int leer = 3;
-int led6 = 6;
+//LEDs a utilizar
+int led13 = 13; // led morse
+int led6 = 6; // Enable led
+// LDRs bonitos
+int lectura = 2; // Lectura de morse - resistencia
+int leer = 3; // Enable LDR
 
 //Estructura
 struct Caracter
