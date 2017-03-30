@@ -156,7 +156,7 @@ void cambioEstado(){
     iVector = iVector+1;
     contador=0;
   }
-  if(iVector==cuantos){
+  else if(iVector==cuantos & variable){
     variable = false;
     estado = false;
     iVector =0;
