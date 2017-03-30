@@ -113,6 +113,7 @@ void leerPalabra(){
    //Imprime la variable con los caracteres acumulados hasta el "\n"   
    if (inChar=='\n'){
       digitalWrite(led6,HIGH);
+      delay(1000);
       Serial.print("Lectura: ");
       Serial.println(string);
       //Borra la variable string para almacenar nuevos datos
