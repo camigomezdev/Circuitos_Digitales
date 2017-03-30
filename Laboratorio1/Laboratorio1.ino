@@ -123,6 +123,9 @@ void leerPalabra(){
 void quehacer(){
   bandera = !bandera;
   if(!bandera){
+    inChar = buscarCaracter(acumulador, pos);
+    Serial.println(inChar); 
+    pos = 0;
     //Escribir
     leerPalabra();
     Timer1.initialize(dit);
