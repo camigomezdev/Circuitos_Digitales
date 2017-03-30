@@ -10,7 +10,7 @@ int iVector;           //Posición del vector actual
 bool variable = false; //Variable para saber si ya se leyó una palabra
 char inChar;           //Caracter para leer 
 String string="";      //Palabra leida    
-bool bandera = false;       //Que hago? TRUE = Escribir FALSE = Leer
+bool bandera = false;  //Que hago? TRUE = Leer FALSE = Escribir
 
 
 //Para la lectura del fotoResistor
@@ -21,7 +21,7 @@ long acumulador[5];
 int pos=0;
 
 
-//LEDs a utilizar
+//Puertos a utilizar
 int led13 = 13;
 int lectura = 2;    
 int leer = 3;   
@@ -88,18 +88,14 @@ void setup()
   //pinMode(leer, INPUT);   
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(leer), quehacer, CHANGE);
-  if(!bandera){
-    Timer1.initialize(dit);
-    Timer1.attachInterrupt(timerIsr);
-  }else if(bandera){
-    Timer1.initialize(50000000);
-    attachInterrupt(digitalPinToInterrupt(lectura), leerFotoresistencia, CHANGE);
-  }
+  Timer1.initialize(dit);
+  Timer1.attachInterrupt(timerIsr);
+  
 }
 
-void loop(){
+void loop(){ 
   leerPalabra();
-  }
+}
 
 void leerPalabra(){
   if (Serial.available()){
@@ -120,8 +116,17 @@ void leerPalabra(){
 }
 
 void quehacer(){
-  Serial.println("HOLA");
   bandera = !bandera;
+  if(!bandera){
+    //Escribir
+    leerPalabra();
+    Timer1.initialize(dit);
+    Timer1.attachInterrupt(timerIsr);
+  }else if(bandera){
+    //Leer
+    Timer1.initialize(50000000);
+    attachInterrupt(digitalPinToInterrupt(lectura), leerFotoresistencia, CHANGE);
+  }
 }
 
 void timerIsr()
