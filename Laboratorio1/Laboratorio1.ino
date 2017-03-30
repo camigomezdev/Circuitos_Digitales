@@ -87,8 +87,8 @@ void setup()
 {
   pinMode(led13, OUTPUT);
   pinMode(led6, OUTPUT);
-  //pinMode(lectura, INPUT);   
-  //pinMode(leer, INPUT);   
+  pinMode(lectura, INPUT);   
+  pinMode(leer, INPUT);   
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(leer), quehacer, CHANGE);
   Timer1.initialize(dit);
@@ -111,7 +111,7 @@ void leerPalabra(){
    if (inChar=='\n'){
       digitalWrite(led6,HIGH);
       delay(1000);
-      Serial.print("Lectura: ");
+      Serial.print("Enviar: ");
       Serial.println(string);
       //Borra la variable string para almacenar nuevos datos
       traduccion(string);
@@ -129,6 +129,7 @@ void quehacer(){
     Timer1.attachInterrupt(timerIsr);
   }else if(bandera){
     //Leer
+    Serial.print("Leo: ");
     Timer1.initialize(50000000);
     attachInterrupt(digitalPinToInterrupt(lectura), leerFotoresistencia, CHANGE);
   }
@@ -187,6 +188,7 @@ void leerFotoresistencia(){
     }
     estado2 = !estado2;
 }
+
 char buscarCaracter(long acumulador[5], int pos){
    int i = 0;
    for(i=0; i<36; i+=1){
