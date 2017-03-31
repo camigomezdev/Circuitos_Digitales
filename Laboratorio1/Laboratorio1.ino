@@ -1,10 +1,10 @@
 #include <TimerOne.h>
 //variables Globales
-long dit = 60000;     //Guarda el valor del DIT
-long dash = dit*4;     //Valor del DASH con respecto al DIT
+int dit = 60;     //Guarda el valor del DIT
+int dash = dit*4;     //Valor del DASH con respecto al DIT
 bool estado = false;   //Guarda el estado del led, asi sabemos si debe estar encendido o apagado
 int contador = 0;      //Cuanta cuanto tiempo ha sido en su estado actual de la variable estado
-long vx[100];          //Vector donde se guarda el mensaje a enviar
+int vx[100];          //Vector donde se guarda el mensaje a enviar
 int cuantos=0;         //Número de posiciones del vector del mensaje a leer
 int iVector;           //Posición del vector actual
 bool variable = false; //Variable para saber si ya se leyó una palabra
@@ -14,10 +14,10 @@ bool bandera = false;  //Que hago? TRUE = Leer FALSE = Escribir
 
 
 //Para la lectura del fotoResistor
-long tiempo;
-long tiempo1;
+int tiempo;
+int tiempo1;
 bool estado2 = true;
-long acumulador[5];
+int acumulador[5];
 int pos=0;
 
 
@@ -32,7 +32,7 @@ int leer = 3; // Enable LDR
 struct Caracter
 {  
   int cantidad;
-  long vector[5];
+  int vector[5];
   char caract;
 };
 
@@ -91,7 +91,8 @@ void setup()
   pinMode(leer, INPUT);   
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(leer), quehacer, CHANGE);
-  Timer1.initialize(dit);
+  long dit2= 60000;
+  Timer1.initialize(dit2);
   Timer1.attachInterrupt(timerIsr);
   
 }
@@ -110,7 +111,7 @@ void leerPalabra(){
    //Imprime la variable con los caracteres acumulados hasta el "\n"   
    if (inChar=='\n'){
       digitalWrite(led6,HIGH);
-      delay(1000);
+      //delay(1000);
       Serial.print("Enviar: ");
       Serial.println(string);
       //Borra la variable string para almacenar nuevos datos
@@ -128,11 +129,12 @@ void quehacer(){
     pos = 0;
     //Escribir
     leerPalabra();
-    Timer1.initialize(dit);
+    long dit2= 60000;
+    Timer1.initialize(dit2);
     Timer1.attachInterrupt(timerIsr);
   }else if(bandera){
     //Leer
-    Serial.print("Leo: ");
+    Serial.print("Leo: ");l
     Timer1.initialize(50000000);
     attachInterrupt(digitalPinToInterrupt(lectura), leerFotoresistencia, CHANGE);
   }
@@ -144,19 +146,20 @@ void timerIsr()
   if(!estado){
     digitalWrite(led13,LOW);  
   }else{
-    digitalWrite(led13,HIGH);  
+    Serial.println(Timer1.read());
+    digitalWrite(led13,HIGH);
   }
   
 }
 
 void cambioEstado(){
-  long x = dit*contador;
+  int x = dit*contador;
   if(vx[iVector]==x & variable & iVector<cuantos){
     estado = !estado;
     iVector = iVector+1;
     contador=0;
   }
-  else if(iVector==cuantos & variable){
+  if(iVector==cuantos & variable){
     variable = false;
     estado = false;
     iVector =0;
@@ -166,9 +169,9 @@ void cambioEstado(){
 }
 
 void leerFotoresistencia(){
-    tiempo = Timer1.read();
+    tiempo = Timer1.read()/1000;
     Timer1.restart();
-    tiempo1 = (tiempo+10000)/(dit);
+    tiempo1 = (tiempo+10)/(dit);
     tiempo1 = tiempo1*dit;
     if(!estado2){
        if(tiempo1 == dash){
@@ -192,7 +195,7 @@ void leerFotoresistencia(){
     estado2 = !estado2;
 }
 
-char buscarCaracter(long acumulador[5], int pos){
+char buscarCaracter(int acumulador[5], int pos){
    int i = 0;
    for(i=0; i<36; i+=1){
      if(pos == diccionario[i].cantidad){
