@@ -1,17 +1,17 @@
 #include <TimerOne.h>
 //variables Globales
-int dit = 60;     //Guarda el valor del DIT
-int dash = dit*4;     //Valor del DASH con respecto al DIT
-bool estado = false;   //Guarda el estado del led, asi sabemos si debe estar encendido o apagado
-int contador = 0;      //Cuanta cuanto tiempo ha sido en su estado actual de la variable estado
-int vx[100];          //Vector donde se guarda el mensaje a enviar
-int cuantos=0;         //Número de posiciones del vector del mensaje a leer
-int iVector;           //Posición del vector actual
-bool variable = false; //Variable para saber si ya se leyó una palabra
-char inChar;           //Caracter para leer 
-String string="";      //Palabra leida    
-bool bandera = false;  //Que hago? TRUE = Leer FALSE = Escribir
-
+int dit = 60;                   //Guarda el valor del DIT
+long dit2= (long)dit*1000;      //DIT para el timer
+int dash = dit*4;               //Valor del DASH con respecto al DIT
+bool estado = false;            //Guarda el estado del led, asi sabemos si debe estar encendido o apagado
+int contador = 0;               //Cuanta cuanto tiempo ha sido en su estado actual de la variable estado
+int vx[400];                    //Vector donde se guarda el mensaje a enviar
+int cuantos=0;                  //Número de posiciones del vector del mensaje a leer
+int iVector;                    //Posición del vector actual
+bool variable = false;          //Variable para saber si ya se leyó una palabra
+char inChar;                    //Caracter para leer 
+String string="";               //Palabra leida    
+bool bandera = false;           //Que hago? TRUE = Leer FALSE = Escribir
 
 //Para la lectura del fotoResistor
 int tiempo;
@@ -19,7 +19,6 @@ int tiempo1;
 bool estado2 = true;
 int acumulador[5];
 int pos=0;
-
 
 //LEDs a utilizar
 int led13 = 13; // led morse
@@ -91,7 +90,6 @@ void setup()
   pinMode(leer, INPUT);   
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(leer), quehacer, CHANGE);
-  long dit2= 60000;
   Timer1.initialize(dit2);
   Timer1.attachInterrupt(timerIsr);
   
@@ -99,6 +97,26 @@ void setup()
 
 void loop(){ 
   leerPalabra();
+}
+
+void quehacer(){
+  bandera = !bandera;
+  if(!bandera){
+    inChar = buscarCaracter(acumulador, pos);
+    Serial.println(inChar); 
+    string+=inChar;
+    string+=' ';
+    pos = 0;
+    //Escribir
+    leerPalabra();
+    Timer1.initialize(dit2);
+    Timer1.attachInterrupt(timerIsr);
+  }else if(bandera){
+    //Leer
+    Serial.print("Leo: ");
+    Timer1.initialize(50000000);
+    attachInterrupt(digitalPinToInterrupt(lectura), leerFotoresistencia, CHANGE);
+  }
 }
 
 void leerPalabra(){
@@ -121,32 +139,12 @@ void leerPalabra(){
   }
 }
 
-void quehacer(){
-  bandera = !bandera;
-  if(!bandera){
-    inChar = buscarCaracter(acumulador, pos);
-    Serial.println(inChar); 
-    pos = 0;
-    //Escribir
-    leerPalabra();
-    long dit2= 60000;
-    Timer1.initialize(dit2);
-    Timer1.attachInterrupt(timerIsr);
-  }else if(bandera){
-    //Leer
-    Serial.print("Leo: ");l
-    Timer1.initialize(50000000);
-    attachInterrupt(digitalPinToInterrupt(lectura), leerFotoresistencia, CHANGE);
-  }
-}
-
 void timerIsr()
 {
   cambioEstado();
   if(!estado){
     digitalWrite(led13,LOW);  
   }else{
-    Serial.println(Timer1.read());
     digitalWrite(led13,HIGH);
   }
   
@@ -177,11 +175,14 @@ void leerFotoresistencia(){
        if(tiempo1 == dash){
           inChar = buscarCaracter(acumulador, pos);
           Serial.print(inChar); 
+          string+=inChar;
           pos = 0;
        }else if(tiempo1 == dit*5){
           inChar = buscarCaracter(acumulador, pos);
           Serial.print(inChar);
-          Serial.print('_');
+          string+=inChar;
+          Serial.print(' ');
+          string+=' ';
           pos = 0;
        }
     }else{
