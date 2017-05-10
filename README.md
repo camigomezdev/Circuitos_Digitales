@@ -12,5 +12,6 @@ Para mayor información leer la guía de los laboratorios.
 
 __Autores:__
 
-* Santiago Romero :octocat: bonampa312
-* Maria Camila Gómez :octocat: camigomez35
+* Santiago Romero :octocat: @bonampa312
+* Maria Camila Gómez :octocat: @camigomez35
+* Jhonatan Arcila :octocat: @jhonatanarcila
