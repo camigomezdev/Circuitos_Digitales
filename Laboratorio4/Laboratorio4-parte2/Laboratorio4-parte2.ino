@@ -109,7 +109,6 @@ void sistemaRemoto(){
         if(inChar == 'A' || inChar == 'B' || inChar == 'C' || inChar == 'D' || inChar == '1' || inChar == '2' 
         || inChar == '3' || inChar == '4' || inChar == '5' || inChar == '6' || inChar == '7' || inChar == '8' 
         || inChar == '9' || inChar == '0' || inChar == '*' || inChar == '#'){
-             Serial.print('*');
              stringClaveRemota +=inChar;
              cantidadClaveRemota +=1;
         }
@@ -149,7 +148,6 @@ void leerClave(char tipoClave){
         if(inChar == 'A' || inChar == 'B' || inChar == 'C' || inChar == 'D' || inChar == '1' || inChar == '2' 
         || inChar == '3' || inChar == '4' || inChar == '5' || inChar == '6' || inChar == '7' || inChar == '8' 
         || inChar == '9' || inChar == '0' || inChar == '*' || inChar == '#'){
-             Serial.print('*');
              claveSerial +=inChar;
              cantidad +=1;
         }
@@ -171,7 +169,6 @@ void leerClave(char tipoClave){
           if(inChar == 'A' || inChar == 'B' || inChar == 'C' || inChar == 'D' || inChar == '1' || inChar == '2' 
           || inChar == '3' || inChar == '4' || inChar == '5' || inChar == '6' || inChar == '7' || inChar == '8' 
           || inChar == '9' || inChar == '0' || inChar == '*' || inChar == '#'){
-               Serial.print('*');
                claveSerial +=inChar;
                cantidad +=1;
            }
@@ -208,7 +205,6 @@ void leerClave(char tipoClave){
     if(inChar == 'A' || inChar == 'B' || inChar == 'C' || inChar == 'D' || inChar == '1' || inChar == '2' 
     || inChar == '3' || inChar == '4' || inChar == '5' || inChar == '6' || inChar == '7' || inChar == '8' 
     || inChar == '9' || inChar == '0' || inChar == '*' || inChar == '#'){
-         Serial.print('*');
          claveSerial +=inChar;
          cantidad +=1;
      }
@@ -338,6 +334,7 @@ void iniciarSistema(){
 
 bool validarClaveRemota(int posicion, String clave){
   Serial.println("\nValidar clave");
+  Serial.println("end");
   if(clave==lectura(posicion)){      
       contadorErrores = 0;
       playNote('b', 100);
@@ -405,7 +402,6 @@ void sistemaBloqueado(){
           if(inChar == 'A' || inChar == 'B' || inChar == 'C' || inChar == 'D' || inChar == '1' || inChar == '2' 
           || inChar == '3' || inChar == '4' || inChar == '5' || inChar == '6' || inChar == '7' || inChar == '8' 
           || inChar == '9' || inChar == '0' || inChar == '*' || inChar == '#'){
-               Serial.print('*');
                clave +=inChar;
           }
         }else{
